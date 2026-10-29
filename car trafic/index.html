@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Highway Velocity &bull; Minimalist Car Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Local Three.js with CDN fallback -->
+    <script src="three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+</head>
+<body>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay Layer -->
+    <div class="ui-overlay">
+
+        <!-- 1. MAIN MENU SCREEN -->
+        <div id="menu-screen" class="screen-card">
+            <div class="title-badge">Minimalist 3D Avto Simulyator</div>
+            <h1>VELOCITY 3D</h1>
+            <p class="tagline">Magistralda tezyurar haydash, xavfli quvib o'tishlar va drift sinovi. Cheksiz trassa, yuqori tezlik.</p>
+
+            <!-- Sleek Minimalist Car Color Selector -->
+            <div class="color-picker-section">
+                <label>Mashina rangi (Monoxrom / Metallik)</label>
+                <div class="swatch-group">
+                    <div class="color-swatch active" data-color="181c24" style="background: #181c24;" title="Qora Obsidian"></div>
+                    <div class="color-swatch" data-color="333945" style="background: #333945;" title="To'q Grafit"></div>
+                    <div class="color-swatch" data-color="858d9b" style="background: #858d9b;" title="Titanium Kumush"></div>
+                    <div class="color-swatch" data-color="dce2ec" style="background: #dce2ec;" title="Oq Marvarid"></div>
+                    <div class="color-swatch" data-color="162438" style="background: #162438;" title="Tungi Ko'k"></div>
+                </div>
+            </div>
+
+            <!-- Controls Guide -->
+            <div class="controls-guide">
+                <div class="control-item">
+                    <span class="label">Tezlanish / Gaz:</span>
+                    <kbd>W</kbd> yoki <kbd>&uarr;</kbd>
+                </div>
+                <div class="control-item">
+                    <span class="label">Rul boshqaruvi:</span>
+                    <kbd>A</kbd> / <kbd>D</kbd> yoki <kbd>&larr;</kbd> / <kbd>&rarr;</kbd>
+                </div>
+                <div class="control-item">
+                    <span class="label">Tormoz / Qaytish:</span>
+                    <kbd>S</kbd> yoki <kbd>&darr;</kbd>
+                </div>
+                <div class="control-item">
+                    <span class="label">Drift / Sirpanish:</span>
+                    <kbd>SPACE</kbd>
+                </div>
+                <div class="control-item">
+                    <span class="label">Nitro Tezlatgich:</span>
+                    <kbd>SHIFT</kbd> yoki <kbd>F</kbd>
+                </div>
+                <div class="control-item">
+                    <span class="label">Kamera burchagi:</span>
+                    <kbd>C</kbd>
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                O'yinni Boshlash
+            </button>
+        </div>
+
+        <!-- 2. IN-GAME HUD -->
+        <div id="hud" class="hidden">
+            <!-- Top Bar -->
+            <div class="hud-top">
+                <div class="hud-score-card">
+                    <div class="hud-score-label">Ochko</div>
+                    <div id="hud-score" class="hud-score-val">0</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                        Masofa: <span id="hud-distance" style="color: #fff; font-weight: 600;">0 m</span> &bull; 
+                        Rekord: <span id="hud-highscore" style="color: var(--accent-ice); font-weight: 700;">0</span>
+                    </div>
+                </div>
+
+                <div class="hud-top-actions">
+                    <button id="weather-btn" class="hud-btn" title="Ob-havoni almashtirish">🌙 TUNGI OYDIN</button>
+                    <button id="cam-btn" class="hud-btn" title="Kamera almashtirish">🎥 KAMERA (C)</button>
+                    <button id="audio-btn" class="hud-btn" title="Ovoz yoqish/o'chirish">🔊 OVOZ: YONIQ</button>
+                    <button id="pause-btn" class="hud-btn" title="O'yinni to'xtatish">⏸️ PAUZA (P)</button>
+                </div>
+            </div>
+
+            <!-- Drift Banner -->
+            <div id="drift-alert" class="hidden">DRIFT x1.0 &bull; 0 PTS</div>
+
+            <!-- Bottom Telemetry Bar -->
+            <div class="hud-bottom">
+                <div class="speedo-cluster">
+                    <div class="speed-row">
+                        <span id="hud-speed" class="speed-digits">0</span>
+                        <span class="speed-unit">KM/SOAT</span>
+                    </div>
+                    
+                    <div class="speed-bar-container">
+                        <div id="speed-bar-fill"></div>
+                    </div>
+
+                    <div class="nitro-row">
+                        <span class="nitro-label">NITRO</span>
+                        <div class="nitro-bar-container">
+                            <div id="nitro-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Notifications (Near misses, combos) -->
+        <div id="floating-alerts"></div>
+
+        <!-- 3. PAUSE SCREEN -->
+        <div id="pause-screen" class="screen-card hidden">
+            <h2>O'yin To'xtatildi</h2>
+            <p class="tagline" style="margin-bottom: 20px;">Trassadagi harakat pauza holatida.</p>
+            <button id="resume-btn" class="btn-primary" style="margin-bottom: 12px;">Davom Ettirish</button>
+            <button id="pause-menu-btn" class="btn-secondary" style="width: 100%;">Asosiy Menyu / Garaj</button>
+        </div>
+
+        <!-- 4. GAME OVER SCREEN -->
+        <div id="gameover-screen" class="screen-card hidden">
+            <div class="title-badge" style="color: var(--accent-red); background: rgba(255, 51, 75, 0.1); border-color: rgba(255, 51, 75, 0.3);">
+                POYGA TUGADI
+            </div>
+            <h1 id="go-reason">To'qnashuv!</h1>
+
+            <div class="stats-grid">
+                <div class="stat-box full-width">
+                    <div class="stat-label">Jami To'plangan Ochko</div>
+                    <div id="go-score" class="stat-val">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Bosib O'tilgan Masofa</div>
+                    <div id="go-distance" class="stat-val">0 m</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Eng Yuqori Tezlik</div>
+                    <div id="go-speed" class="stat-val">0 km/s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Xavfli O'tishlar (Near Miss)</div>
+                    <div id="go-nearmiss" class="stat-val">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Eng Yaxshi Natija</div>
+                    <div id="go-highscore" class="stat-val">0</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 14px;">
+                <button id="restart-btn" class="btn-primary" style="flex: 2;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    Qayta Boshlash
+                </button>
+                <button id="go-menu-btn" class="btn-secondary" style="flex: 1;">Garaj</button>
+            </div>
+        </div>
+
+        <!-- 5. ON-SCREEN MOBILE TOUCH CONTROLS -->
+        <div id="mobile-controls">
+            <!-- Left Side: Steering -->
+            <div class="touch-cluster">
+                <div id="btn-left" class="touch-btn">&larr;</div>
+                <div id="btn-right" class="touch-btn">&rarr;</div>
+            </div>
+
+            <!-- Right Side: Gas, Brake, Nitro, Drift -->
+            <div class="touch-cluster">
+                <div id="btn-drift" class="touch-btn drift-touch">DRIFT</div>
+                <div id="btn-brake" class="touch-btn">&#9660;</div>
+                <div id="btn-gas" class="touch-btn">&#9650;</div>
+                <div id="btn-nitro" class="touch-btn nitro-touch">N2O</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="audio.js"></script>
+    <script src="models.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+/* ==========================================================
+   MINIMALIST SLEEK 3D CAR GAME STYLESHEET
+   Aesthetic: Dark Noir / Minimalist Titanium / Precision HUD
+   ========================================================== */
+
+:root {
+    --bg-dark: #090a0f;
+    --panel-bg: rgba(14, 17, 24, 0.78);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f2f5f9;
+    --text-muted: #7e8796;
+    --accent-ice: #00e5ff;
+    --accent-red: #ff334b;
+    --accent-gold: #ffbe3b;
+    --accent-green: #00ffaa;
+    --glass-blur: blur(16px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-primary);
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Common UI Screen Overlay */
+.ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.screen-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 36px 42px;
+    border-radius: 18px;
+    text-align: center;
+    max-width: 520px;
+    width: 90%;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    pointer-events: auto;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.title-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-ice);
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+h1 {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.tagline {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* Car Color Selector in Menu */
+.color-picker-section {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-picker-section label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.swatch-group {
+    display: flex;
+    gap: 12px;
+}
+
+.color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.color-swatch:hover {
+    transform: scale(1.15);
+}
+
+.color-swatch.active {
+    border-color: var(--accent-ice);
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.5);
+    transform: scale(1.18);
+}
+
+/* Controls Guide Table */
+.controls-guide {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.control-item .label {
+    color: var(--text-muted);
+}
+
+.control-item kbd {
+    background: #1b1f28;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Action Buttons */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 24px;
+    background: #ffffff;
+    color: #0b0d12;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary:hover {
+    background: #e1e7f0;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 18px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Stats in Game Over Screen */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 22px 0;
+    text-align: left;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.35);
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stat-box.full-width {
+    grid-column: span 2;
+    background: rgba(0, 229, 255, 0.06);
+    border-color: rgba(0, 229, 255, 0.2);
+}
+
+.stat-box .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+}
+
+.stat-box .stat-val {
+    font-size: 22px;
+    font-weight: 800;
+    font-family: monospace;
+    color: #ffffff;
+}
+
+.stat-box.full-width .stat-val {
+    color: var(--accent-ice);
+    font-size: 30px;
+}
+
+/* ==========================================================
+   IN-GAME HUD (Heads-Up Display)
+   ========================================================== */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hud-score-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: var(--glass-blur);
+    padding: 12px 20px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.hud-score-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.hud-score-val {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: monospace;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.hud-top-actions {
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.hud-btn {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: var(--glass-blur);
+    transition: all 0.2s ease;
+}
+
+.hud-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Floating Alerts (Near miss / Drift popups) */
+#floating-alerts {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 8;
+}
+
+.floating-popup {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+    animation: popupFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popupFade {
+    0% { opacity: 0; transform: translateY(20px) scale(0.85); }
+    20% { opacity: 1; transform: translateY(0) scale(1.08); }
+    80% { opacity: 1; transform: translateY(-10px) scale(1); }
+    100% { opacity: 0; transform: translateY(-30px) scale(0.95); }
+}
+
+#drift-alert {
+    position: absolute;
+    top: 36%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    backdrop-filter: var(--glass-blur);
+    color: var(--accent-ice);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+/* HUD Bottom: Speedometer & Telemetry */
+.hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.speedo-cluster {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: var(--glass-blur);
+    padding: 16px 22px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    min-width: 190px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.speed-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.speed-digits {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: monospace;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.speed-unit {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.speed-bar-container {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 10px 0 12px 0;
+    overflow: hidden;
+}
+
+#speed-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #99bbdd, var(--accent-ice));
+    transition: width 0.08s linear;
+}
+
+.nitro-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nitro-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--accent-ice);
+    text-transform: uppercase;
+}
+
+.nitro-bar-container {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#nitro-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--accent-ice);
+    box-shadow: 0 0 10px var(--accent-ice);
+    transition: width 0.1s ease;
+}
+
+/* Mobile Touch Controls */
+#mobile-controls {
+    display: none; /* Enabled on small screens or touch devices */
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    padding: 0 24px;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 12;
+}
+
+.touch-cluster {
+    display: flex;
+    gap: 12px;
+    pointer-events: auto;
+}
+
+.touch-btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: var(--glass-blur);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.touch-btn:active {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(0.92);
+}
+
+.touch-btn.nitro-touch {
+    border-color: rgba(0, 229, 255, 0.4);
+    color: var(--accent-ice);
+}
+
+.touch-btn.drift-touch {
+    border-color: rgba(255, 190, 59, 0.4);
+    color: var(--accent-gold);
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Mobile responsive media query */
+@media (max-width: 768px) {
+    #mobile-controls {
+        display: flex;
+    }
+    .controls-guide {
+        display: none;
+    }
+    .hud-bottom {
+        margin-bottom: 80px;
+    }
+    .screen-card {
+        padding: 24px 20px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+}
