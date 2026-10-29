@@ -1,0 +1,493 @@
+/* =========================================================
+   TETRIS PRO - CSS STYLING
+   ========================================================= */
+
+:root {
+  --bg-color: #0b0c16;
+  --panel-bg: rgba(20, 24, 42, 0.75);
+  --panel-border: rgba(90, 105, 175, 0.35);
+  --text-main: #f0f4fc;
+  --text-muted: #8892b0;
+  
+  --neon-cyan: #00f0f0;
+  --neon-pink: #ff0077;
+  --neon-green: #00ff66;
+  --neon-yellow: #ffee00;
+  --neon-purple: #9d00ff;
+  --neon-blue: #0055ff;
+  --neon-orange: #ff7700;
+
+  --font-retro: 'Press Start 2P', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Fon effekti */
+.background-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 240, 240, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 240, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.game-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  max-width: 960px;
+  width: 100%;
+}
+
+/* Header */
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-family: var(--font-retro);
+  font-size: 2.2rem;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 
+    0 0 10px var(--neon-cyan),
+    0 0 20px var(--neon-cyan),
+    0 0 40px var(--neon-blue);
+}
+
+.badge {
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--neon-pink);
+  background: rgba(255, 0, 119, 0.15);
+  box-shadow: 0 0 12px rgba(255, 0, 119, 0.3);
+}
+
+/* O'yin asosiy qismi */
+.game-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Panellar */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 170px;
+}
+
+.panel-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panel-title {
+  font-family: var(--font-retro);
+  font-size: 0.7rem;
+  color: var(--neon-cyan);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+/* Kichik preview canvaslar */
+#holdCanvas,
+#nextCanvas {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: block;
+}
+
+/* Statistika */
+.stats-box {
+  width: 100%;
+  gap: 10px;
+}
+
+.stat-item {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 3px solid var(--neon-cyan);
+}
+
+.stat-label {
+  font-family: var(--font-retro);
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-val {
+  font-family: var(--font-retro);
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.neon-pink {
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.neon-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 10px var(--neon-green);
+}
+
+.neon-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.neon-yellow {
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px var(--neon-yellow);
+}
+
+/* Asosiy doska / Canvas */
+.board-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas-container {
+  position: relative;
+  background: rgba(8, 10, 20, 0.95);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 12px;
+  box-shadow: 
+    0 0 25px rgba(0, 240, 240, 0.25),
+    inset 0 0 20px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  line-height: 0;
+}
+
+#tetrisCanvas {
+  display: block;
+}
+
+/* Overlay oynalar */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 9, 20, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.overlay-card {
+  text-align: center;
+  padding: 24px 20px;
+  background: rgba(18, 22, 40, 0.9);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 240, 240, 0.2);
+  max-width: 260px;
+  width: 90%;
+}
+
+.overlay-title {
+  font-family: var(--font-retro);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #fff;
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.game-over-text {
+  color: var(--neon-pink);
+  text-shadow: 0 0 12px var(--neon-pink);
+}
+
+.overlay-sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.final-stats {
+  font-size: 1rem;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Tugmalar */
+.btn {
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 198, 255, 0.7);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff0844, #ff4e50);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 8, 68, 0.4);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 8, 68, 0.7);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 8px;
+}
+
+.btn-secondary:last-child {
+  margin-bottom: 0;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--neon-cyan);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.actions-box {
+  width: 100%;
+}
+
+/* Yordam paneli */
+.help-box {
+  width: 100%;
+  text-align: left;
+}
+
+.help-title {
+  font-family: var(--font-retro);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.help-list {
+  list-style: none;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.help-list li {
+  display: flex;
+  justify-content: space-between;
+  color: #cad3f5;
+}
+
+.help-list li span {
+  font-weight: bold;
+  color: var(--neon-cyan);
+}
+
+/* Mobil boshqaruv */
+.mobile-controls {
+  display: none;
+  width: 100%;
+  max-width: 460px;
+  margin-top: 18px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctrl-group {
+  display: flex;
+  gap: 8px;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 8px;
+}
+
+.touch-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(25, 30, 52, 0.85);
+  border: 1px solid var(--panel-border);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.1s, background-color 0.1s;
+}
+
+.touch-btn:active {
+  transform: scale(0.92);
+  background: rgba(0, 240, 240, 0.3);
+  border-color: var(--neon-cyan);
+}
+
+.primary-touch {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 240, 0.25);
+}
+
+.drop-btn {
+  width: 80px;
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  background: linear-gradient(135deg, rgba(255, 0, 119, 0.6), rgba(255, 77, 0, 0.6));
+  border-color: var(--neon-pink);
+}
+
+/* Responsivlik */
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .side-panel {
+    width: 140px;
+  }
+
+  .help-box {
+    display: none;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .game-wrapper {
+    padding: 8px;
+  }
+
+  .game-container {
+    gap: 8px;
+  }
+
+  .side-panel {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .left-panel {
+    order: 2;
+  }
+
+  .board-area {
+    order: 1;
+  }
+
+  .right-panel {
+    order: 3;
+  }
+
+  .panel-box {
+    padding: 8px;
+  }
+
+  #tetrisCanvas {
+    width: 250px;
+    height: 500px;
+  }
+
+  .touch-btn {
+    width: 46px;
+    height: 46px;
+    font-size: 1rem;
+  }
+
+  .drop-btn {
+    width: 65px;
+    font-size: 0.55rem;
+  }
+}

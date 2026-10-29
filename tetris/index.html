@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tetris Classic & Neon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-grid"></div>
+
+  <div class="game-wrapper">
+    <header class="game-header">
+      <h1 class="logo">TETRIS</h1>
+      <div class="header-badges">
+        <span class="badge neon-text">PRO EDITION</span>
+      </div>
+    </header>
+
+    <main class="game-container">
+      <!-- Chap panel: Hold & Qo'shimcha statistika -->
+      <aside class="side-panel left-panel">
+        <div class="panel-box">
+          <h2 class="panel-title">SAQLASH (C)</h2>
+          <canvas id="holdCanvas" width="120" height="120"></canvas>
+        </div>
+
+        <div class="panel-box stats-box">
+          <div class="stat-item">
+            <span class="stat-label">REKORD</span>
+            <span id="highScore" class="stat-val neon-pink">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">OCHKO</span>
+            <span id="score" class="stat-val neon-green">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">BOSQICH</span>
+            <span id="level" class="stat-val neon-cyan">1</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">QATORLAR</span>
+            <span id="lines" class="stat-val neon-yellow">0</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Asosiy doska -->
+      <section class="board-area">
+        <div class="canvas-container">
+          <canvas id="tetrisCanvas" width="300" height="600"></canvas>
+
+          <!-- O'yin overlay holatlari -->
+          <div id="startOverlay" class="overlay active">
+            <div class="overlay-card">
+              <h2 class="overlay-title">TETRIS</h2>
+              <p class="overlay-sub">Boshlash uchun tugmani bosing</p>
+              <button id="startBtn" class="btn btn-primary">O'YINNI BOSHLASH</button>
+            </div>
+          </div>
+
+          <div id="pauseOverlay" class="overlay hidden">
+            <div class="overlay-card">
+              <h2 class="overlay-title">PAUZA</h2>
+              <p class="overlay-sub">O'yin to'xtatildi</p>
+              <button id="resumeBtn" class="btn btn-primary">DAVOM ETISH</button>
+            </div>
+          </div>
+
+          <div id="gameOverOverlay" class="overlay hidden">
+            <div class="overlay-card">
+              <h2 class="overlay-title game-over-text">O'YIN TUGADI!</h2>
+              <div class="final-stats">
+                <p>Yakuniy ochko: <span id="finalScore" class="neon-green">0</span></p>
+                <p>O'chirilgan qatorlar: <span id="finalLines" class="neon-yellow">0</span></p>
+              </div>
+              <button id="restartBtn" class="btn btn-danger">QAYTADAN O'YNASH</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- O'ng panel: Navbatdagi figuralar va boshqaruv -->
+      <aside class="side-panel right-panel">
+        <div class="panel-box">
+          <h2 class="panel-title">KEYINGI</h2>
+          <canvas id="nextCanvas" width="120" height="120"></canvas>
+        </div>
+
+        <div class="panel-box actions-box">
+          <button id="pauseToggleBtn" class="btn btn-secondary">PAUZA (P)</button>
+          <button id="soundToggleBtn" class="btn btn-secondary sound-btn">
+            <span id="soundIcon">🔊</span> OVOZ: <span id="soundState">YOQIQ</span>
+          </button>
+          <button id="resetGameBtn" class="btn btn-secondary">YANGILASH</button>
+        </div>
+
+        <div class="panel-box help-box">
+          <h3 class="help-title">BOSHQARUV:</h3>
+          <ul class="help-list">
+            <li><span>⬅️ / ➡️</span> Siljitish</li>
+            <li><span>⬆️</span> Aylantirish</li>
+            <li><span>⬇️</span> Sekin tushirish</li>
+            <li><span>Space</span> Birdaniga tushirish</li>
+            <li><span>C / Shift</span> Hold (Saqlash)</li>
+            <li><span>P / Esc</span> Pauza</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Mobil / Sensorli ekran tugmalari -->
+    <div class="mobile-controls">
+      <div class="ctrl-group left-group">
+        <button id="ctrlHold" class="touch-btn" aria-label="Hold">HOLD</button>
+        <button id="ctrlRotate" class="touch-btn primary-touch" aria-label="Rotate">🔄</button>
+      </div>
+      <div class="ctrl-group center-group">
+        <div class="dpad-row">
+          <button id="ctrlLeft" class="touch-btn" aria-label="Left">⬅️</button>
+          <button id="ctrlDown" class="touch-btn" aria-label="Down">⬇️</button>
+          <button id="ctrlRight" class="touch-btn" aria-label="Right">➡️</button>
+        </div>
+      </div>
+      <div class="ctrl-group right-group">
+        <button id="ctrlDrop" class="touch-btn drop-btn" aria-label="Hard Drop">⚡ DROP</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="tetris.js"></script>
+</body>
+</html>
