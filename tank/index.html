@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Tank 1990 - Battle City (Full Screen Arcade)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-app" class="game-app">
+        <!-- TOP ARCADE HEADER -->
+        <header class="arcade-header">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <span class="brand-icon">🎮</span>
+                    <span class="brand-title">TANK 1990</span>
+                    <span class="brand-tag">BATTLE CITY</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button id="btn-sound-toggle" class="btn-arcade" title="Ovozni yoqish / o'chirish (M)">
+                    🔊 <span class="btn-text">Ovoz: Yoniq</span>
+                </button>
+                <button id="btn-pause-toggle" class="btn-arcade" title="O'yinni to'xtatish / davom ettirish (P)">
+                    ⏸️ <span class="btn-text">Pauza</span>
+                </button>
+                <button id="btn-touch-toggle" class="btn-arcade" title="Sensor boshqaruv tugmalarini ko'rsatish / yashirish">
+                    🎮 <span class="btn-text">Sensor</span>
+                </button>
+                <button id="btn-fullscreen-toggle" class="btn-arcade btn-accent" title="To'liq ekran rejimiga o'tish (F)">
+                    ⛶ <span class="btn-text">To‘liq Ekran</span>
+                </button>
+                <button id="btn-help-toggle" class="btn-arcade" title="O'yin qoidalari va boshqaruv">
+                    📖 <span class="btn-text">Qoidalar</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ASOSIY TO'LIQ EKRAN O'YIN MAYDONI -->
+        <main id="game-wrapper" class="game-viewport-container">
+            <div class="canvas-viewport">
+                <canvas id="gameCanvas" width="480" height="416"></canvas>
+                <!-- Retro CRT Scanline va nur effekti -->
+                <div class="crt-overlay" aria-hidden="true"></div>
+            </div>
+
+            <!-- SENSORLI BOSHQARUV TUGMALARI (TOUCH CONTROLS OVERLAY) -->
+            <div id="touch-controls" class="touch-controls-layer">
+                <!-- CHAP TOMON: KRESTOVINA (D-PAD) -->
+                <div class="touch-dpad-group">
+                    <div class="touch-dpad">
+                        <button id="dpad-up" class="dpad-btn up" aria-label="Yuqoriga">▲</button>
+                        <button id="dpad-right" class="dpad-btn right" aria-label="O‘ngga">▶</button>
+                        <button id="dpad-down" class="dpad-btn down" aria-label="Pastga">▼</button>
+                        <button id="dpad-left" class="dpad-btn left" aria-label="Chapga">◀</button>
+                        <div class="dpad-center"></div>
+                    </div>
+                </div>
+
+                <!-- O'RTA QISM: SELECT VA START TUGMALARI -->
+                <div class="touch-system-group">
+                    <button id="btn-select" class="sys-btn" aria-label="Select">SELECT</button>
+                    <button id="btn-start" class="sys-btn" aria-label="Start">START</button>
+                </div>
+
+                <!-- O'NG TOMON: AMAL TUGMALARI (A, B, X, Y) -->
+                <div class="touch-action-group">
+                    <div class="action-grid">
+                        <button id="btn-y" class="act-btn turbo-btn pos-y" aria-label="Turbo Y">Y</button>
+                        <button id="btn-x" class="act-btn turbo-btn pos-x" aria-label="Turbo X">X</button>
+                        <button id="btn-b" class="act-btn fire-b pos-b" aria-label="O‘t ochish B">B</button>
+                        <button id="btn-a" class="act-btn fire-a pos-a" aria-label="O‘t ochish A">A</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- QOIDALAR VA YORDAM MODAL OYNASI -->
+    <div id="help-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>📖 O‘yin Qoidalari & Boshqaruv</h3>
+                <button id="btn-help-close" class="modal-close" aria-label="Yopish">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="guide-section">
+                    <h4>💻 Klaviatura Boshqaruvi:</h4>
+                    <div class="shortcuts-grid">
+                        <div><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> yoki <kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd></div>
+                        <span>Tank harakati</span>
+                        <div><kbd>Space</kbd> yoki <kbd>J</kbd> / <kbd>Z</kbd></div>
+                        <span>O‘t ochish</span>
+                        <div><kbd>Enter</kbd></div>
+                        <span>O‘yinni boshlash (Start)</span>
+                        <div><kbd>P</kbd> yoki <kbd>Esc</kbd></div>
+                        <span>Pauza</span>
+                        <div><kbd>M</kbd></div>
+                        <span>Ovozni yoqish / o‘chirish</span>
+                        <div><kbd>F</kbd> yoki <kbd>F11</kbd></div>
+                        <span>To‘liq ekran (Fullscreen)</span>
+                        <div><kbd>S</kbd> (Menyuda)</div>
+                        <span>Bosqichni tanlash (Select)</span>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h4>🌟 Bonuslar & Qurollar:</h4>
+                    <div class="powerups-list">
+                        <div class="p-item"><span>⭐ Yulduzcha:</span> Tank darajasini oshiradi (2 ta o‘q, yuqori tezlik, temir devorni buzish)</div>
+                        <div class="p-item"><span>🛡️ Qalqon:</span> 10 soniyalik mutlaq daxlsizlik</div>
+                        <div class="p-item"><span>⏱️ Soat:</span> Barcha dushman tanklarini 10 soniyaga muzlatadi</div>
+                        <div class="p-item"><span>💣 Granata:</span> Ekranda ko‘ringan barcha dushmanlarni bir zumda portlatadi</div>
+                        <div class="p-item"><span>⛏️ Kurak:</span> Shtab atrofini vaqtincha buzilmas po‘lat devor bilan o‘raydi</div>
+                        <div class="p-item"><span>🪖 Tank:</span> +1 qo‘shimcha hayot (jon) beradi</div>
+                        <div class="p-item"><span>🔫 Qurol:</span> Tankni birdaniga eng yuqori 4-darajaga olib chiqadi</div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h4>🦅 Asosiy Vazifa:</h4>
+                    <p>Pastdagi burgut (shtab)ni dushman o‘qlaridan asrang! Agar dushman o‘qi burgutga tegsa — o‘yin darhol mag‘lubiyat bilan tugaydi. Har bir bosqichdagi barcha 20 ta dushman tankini yo‘q qilib g‘alaba qozoning!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTLAR TARTIBI -->
+    <script src="audio.js"></script>
+    <script src="maps.js"></script>
+    <script src="sprites.js"></script>
+    <script src="tank.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
